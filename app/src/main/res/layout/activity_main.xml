@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/circle_background"
+            android:padding="2dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_person" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Tap to add profile picture"
+            android:textColor="@color/gray"
+            android:textSize="14sp" />
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:columnCount="2"
+            android:rowCount="3">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/personalDetailsCard"
+                style="@style/CVOptionCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp">
+
+                <LinearLayout style="@style/CVOptionCardContent">
+                    <ImageView
+                        style="@style/CVOptionIcon"
+                        android:src="@drawable/ic_person" />
+                    <TextView
+                        style="@style/CVOptionText"
+                        android:text="Personal Details" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/summaryCard"
+                style="@style/CVOptionCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp">
+
+                <LinearLayout style="@style/CVOptionCardContent">
+                    <ImageView
+                        style="@style/CVOptionIcon"
+                        android:src="@drawable/ic_summary" />
+                    <TextView
+                        style="@style/CVOptionText"
+                        android:text="Summary" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/educationCard"
+                style="@style/CVOptionCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp">
+
+                <LinearLayout style="@style/CVOptionCardContent">
+                    <ImageView
+                        style="@style/CVOptionIcon"
+                        android:src="@drawable/ic_education" />
+                    <TextView
+                        style="@style/CVOptionText"
+                        android:text="Education" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/experienceCard"
+                style="@style/CVOptionCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp">
+
+                <LinearLayout style="@style/CVOptionCardContent">
+                    <ImageView
+                        style="@style/CVOptionIcon"
+                        android:src="@drawable/ic_work" />
+                    <TextView
+                        style="@style/CVOptionText"
+                        android:text="Experience" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/certificationsCard"
+                style="@style/CVOptionCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp">
+
+                <LinearLayout style="@style/CVOptionCardContent">
+                    <ImageView
+                        style="@style/CVOptionIcon"
+                        android:src="@drawable/ic_certificate" />
+                    <TextView
+                        style="@style/CVOptionText"
+                        android:text="Certifications" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/referencesCard"
+                style="@style/CVOptionCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp">
+
+                <LinearLayout style="@style/CVOptionCardContent">
+                    <ImageView
+                        style="@style/CVOptionIcon"
+                        android:src="@drawable/ic_references" />
+                    <TextView
+                        style="@style/CVOptionText"
+                        android:text="References" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </GridLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/previewButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Preview CV"
+            app:cornerRadius="8dp" />
+
+    </LinearLayout>
+</ScrollView>
