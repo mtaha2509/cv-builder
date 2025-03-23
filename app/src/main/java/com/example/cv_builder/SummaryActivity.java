@@ -2,13 +2,15 @@ package com.example.cv_builder;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class SummaryActivity extends AppCompatActivity {
-    private EditText summaryEditText;
+    private TextInputEditText summaryEditText;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -16,10 +18,9 @@ public class SummaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
 
-        // Enable back button in action bar
+        // Enable back button
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Professional Summary");
         }
 
         // Initialize views
@@ -28,13 +29,13 @@ public class SummaryActivity extends AppCompatActivity {
         Button cancelButton = findViewById(R.id.cancelButton);
 
         // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("CV_DATA", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("CVBuilderPrefs", MODE_PRIVATE);
 
         // Load saved data
         loadSavedData();
 
         // Set up button click listeners
-        saveButton.setOnClickListener(v -> saveData());
+        saveButton.setOnClickListener(v -> validateAndSaveData());
         cancelButton.setOnClickListener(v -> finish());
     }
 
@@ -42,17 +43,29 @@ public class SummaryActivity extends AppCompatActivity {
         summaryEditText.setText(sharedPreferences.getString("summary", ""));
     }
 
-    private void saveData() {
+    private void validateAndSaveData() {
+        String summary = summaryEditText.getText().toString().trim();
+
+        // Validate summary
+        if (TextUtils.isEmpty(summary)) {
+            summaryEditText.setError("Professional summary is required");
+            summaryEditText.requestFocus();
+            return;
+        }
+
+        // Save data if validation passes
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("summary", summaryEditText.getText().toString());
+        editor.putString("summary", summary);
         editor.apply();
+
+        Toast.makeText(this, "Professional summary saved successfully", Toast.LENGTH_SHORT).show();
         finish();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);

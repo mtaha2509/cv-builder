@@ -2,9 +2,10 @@ package com.example.cv_builder;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import java.util.Calendar;
@@ -35,13 +36,13 @@ public class EducationActivity extends AppCompatActivity {
         Button cancelButton = findViewById(R.id.cancelButton);
 
         // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("CV_DATA", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("CVBuilderPrefs", MODE_PRIVATE);
 
         // Load saved data
         loadSavedData();
 
         // Set up button click listeners
-        saveButton.setOnClickListener(v -> saveData());
+        saveButton.setOnClickListener(v -> validateAndSaveData());
         cancelButton.setOnClickListener(v -> finish());
 
         // Set up year validation
@@ -79,33 +80,63 @@ public class EducationActivity extends AppCompatActivity {
         achievementsEditText.setText(sharedPreferences.getString("education_achievements", ""));
     }
 
-    private void saveData() {
-        // Validate years before saving
-        String startYear = startYearEditText.getText().toString();
-        String endYear = endYearEditText.getText().toString();
-        
-        if (!startYear.isEmpty() && !endYear.isEmpty()) {
-            if (Integer.parseInt(endYear) < Integer.parseInt(startYear)) {
-                endYearEditText.setError("End year must be after start year");
-                return;
-            }
+    private void validateAndSaveData() {
+        String institution = institutionEditText.getText().toString().trim();
+        String degree = degreeEditText.getText().toString().trim();
+        String field = fieldEditText.getText().toString().trim();
+        String startYear = startYearEditText.getText().toString().trim();
+        String endYear = endYearEditText.getText().toString().trim();
+        String achievements = achievementsEditText.getText().toString().trim();
+
+        // Validate required fields
+        if (TextUtils.isEmpty(institution)) {
+            institutionEditText.setError("Institution name is required");
+            institutionEditText.requestFocus();
+            return;
         }
 
+        if (TextUtils.isEmpty(degree)) {
+            degreeEditText.setError("Degree is required");
+            degreeEditText.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(field)) {
+            fieldEditText.setError("Field of study is required");
+            fieldEditText.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(startYear)) {
+            startYearEditText.setError("Start year is required");
+            startYearEditText.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(endYear)) {
+            endYearEditText.setError("End year is required");
+            endYearEditText.requestFocus();
+            return;
+        }
+
+        // Save data if validation passes
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("education_institution", institutionEditText.getText().toString());
-        editor.putString("education_degree", degreeEditText.getText().toString());
-        editor.putString("education_field", fieldEditText.getText().toString());
+        editor.putString("education_institution", institution);
+        editor.putString("education_degree", degree);
+        editor.putString("education_field", field);
         editor.putString("education_start_year", startYear);
         editor.putString("education_end_year", endYear);
-        editor.putString("education_achievements", achievementsEditText.getText().toString());
+        editor.putString("education_achievements", achievements);
         editor.apply();
+
+        Toast.makeText(this, "Education details saved successfully", Toast.LENGTH_SHORT).show();
         finish();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -2,8 +2,10 @@ package com.example.cv_builder;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -33,13 +35,13 @@ public class CertificationsActivity extends AppCompatActivity {
         Button cancelButton = findViewById(R.id.cancelButton);
 
         // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("CV_DATA", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("CVBuilderPrefs", MODE_PRIVATE);
 
         // Load saved data
         loadSavedData();
 
         // Set up button click listeners
-        saveButton.setOnClickListener(v -> saveData());
+        saveButton.setOnClickListener(v -> validateAndSaveData());
         cancelButton.setOnClickListener(v -> finish());
     }
 
@@ -51,21 +53,61 @@ public class CertificationsActivity extends AppCompatActivity {
         credentialIdEditText.setText(sharedPreferences.getString("certification_credential_id", ""));
     }
 
-    private void saveData() {
+    private void validateAndSaveData() {
+        String certificationName = certificationNameEditText.getText().toString().trim();
+        String organization = issuingOrganizationEditText.getText().toString().trim();
+        String issueDate = issueDateEditText.getText().toString().trim();
+        String expiryDate = expiryDateEditText.getText().toString().trim();
+        String credentialId = credentialIdEditText.getText().toString().trim();
+
+        // Validate required fields
+        if (TextUtils.isEmpty(certificationName)) {
+            certificationNameEditText.setError("Certification name is required");
+            certificationNameEditText.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(organization)) {
+            issuingOrganizationEditText.setError("Issuing organization is required");
+            issuingOrganizationEditText.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(issueDate)) {
+            issueDateEditText.setError("Issue date is required");
+            issueDateEditText.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(expiryDate)) {
+            expiryDateEditText.setError("Expiry date is required");
+            expiryDateEditText.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(credentialId)) {
+            credentialIdEditText.setError("Credential ID is required");
+            credentialIdEditText.requestFocus();
+            return;
+        }
+
+        // Save data if validation passes
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("certification_name", certificationNameEditText.getText().toString());
-        editor.putString("certification_organization", issuingOrganizationEditText.getText().toString());
-        editor.putString("certification_issue_date", issueDateEditText.getText().toString());
-        editor.putString("certification_expiry_date", expiryDateEditText.getText().toString());
-        editor.putString("certification_credential_id", credentialIdEditText.getText().toString());
+        editor.putString("certification_name", certificationName);
+        editor.putString("certification_organization", organization);
+        editor.putString("certification_issue_date", issueDate);
+        editor.putString("certification_expiry_date", expiryDate);
+        editor.putString("certification_credential_id", credentialId);
         editor.apply();
+
+        Toast.makeText(this, "Certification details saved successfully", Toast.LENGTH_SHORT).show();
         finish();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
