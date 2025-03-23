@@ -47,14 +47,14 @@ public class FinalActivity extends AppCompatActivity {
         Button shareButton = findViewById(R.id.shareButton);
 
         // Load profile image if exists
-        String profileImageUriString = sharedPreferences.getString("profile_image_uri", "");
-        if (!profileImageUriString.isEmpty()) {
-            try {
+        try {
+            String profileImageUriString = sharedPreferences.getString("profile_image_uri", "");
+            if (!profileImageUriString.isEmpty()) {
                 Uri profileImageUri = Uri.parse(profileImageUriString);
                 profileImageView.setImageURI(profileImageUri);
-            } catch (Exception e) {
-                Toast.makeText(this, "Error loading profile image", Toast.LENGTH_SHORT).show();
             }
+        } catch (Exception e) {
+            Toast.makeText(this, "Error loading profile image", Toast.LENGTH_SHORT).show();
         }
 
         // Load and display personal details

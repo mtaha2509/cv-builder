@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,9 +39,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button previewCVBtn = findViewById(R.id.previewButton);
 
         // Load saved profile image
-        String savedImageUri = sharedPreferences.getString("profile_image_uri", "");
-        if (!savedImageUri.isEmpty()) {
-            profileImageView.setImageURI(Uri.parse(savedImageUri));
+        try {
+            String savedImageUri = sharedPreferences.getString("profile_image_uri", "");
+            if (!savedImageUri.isEmpty()) {
+                selectedImageUri = Uri.parse(savedImageUri);
+                profileImageView.setImageURI(selectedImageUri);
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Error loading profile image", Toast.LENGTH_SHORT).show();
         }
 
         // Set click listeners
@@ -58,12 +64,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    selectedImageUri = result.getData().getData();
-                    profileImageView.setImageURI(selectedImageUri);
-                    // Save the image URI
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("profile_image_uri", selectedImageUri.toString());
-                    editor.apply();
+                    try {
+                        selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null) {
+                            profileImageView.setImageURI(selectedImageUri);
+                            // Save the image URI
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("profile_image_uri", selectedImageUri.toString());
+                            editor.apply();
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Error loading selected image", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         );

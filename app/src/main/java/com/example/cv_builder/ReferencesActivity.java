@@ -24,12 +24,12 @@ public class ReferencesActivity extends AppCompatActivity {
         }
 
         // Initialize views
-        nameEditText = findViewById(R.id.nameEditText);
-        positionEditText = findViewById(R.id.positionEditText);
-        companyEditText = findViewById(R.id.companyEditText);
-        emailEditText = findViewById(R.id.emailEditText);
-        phoneEditText = findViewById(R.id.phoneEditText);
-        relationshipEditText = findViewById(R.id.relationshipEditText);
+        nameEditText = findViewById(R.id.referenceNameEditText);
+        positionEditText = findViewById(R.id.referencePositionEditText);
+        companyEditText = findViewById(R.id.referenceCompanyEditText);
+        emailEditText = findViewById(R.id.referenceEmailEditText);
+        phoneEditText = findViewById(R.id.referencePhoneEditText);
+        relationshipEditText = findViewById(R.id.referenceRelationshipEditText);
 
         Button saveButton = findViewById(R.id.saveButton);
         Button cancelButton = findViewById(R.id.cancelButton);
