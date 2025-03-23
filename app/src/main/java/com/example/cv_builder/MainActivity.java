@@ -1,6 +1,7 @@
 package com.example.cv_builder;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -16,11 +17,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView profileImageView;
     private Uri selectedImageUri;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences("CVBuilderPrefs", MODE_PRIVATE);
 
         // Initialize UI elements
         profileImageView = findViewById(R.id.profileImageView);
@@ -31,6 +36,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         CardView certificationsCard = findViewById(R.id.certificationsCard);
         CardView referencesCard = findViewById(R.id.referencesCard);
         Button previewCVBtn = findViewById(R.id.previewButton);
+
+        // Load saved profile image
+        String savedImageUri = sharedPreferences.getString("profile_image_uri", "");
+        if (!savedImageUri.isEmpty()) {
+            profileImageView.setImageURI(Uri.parse(savedImageUri));
+        }
 
         // Set click listeners
         profileImageView.setOnClickListener(this);
@@ -49,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     selectedImageUri = result.getData().getData();
                     profileImageView.setImageURI(selectedImageUri);
+                    // Save the image URI
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("profile_image_uri", selectedImageUri.toString());
+                    editor.apply();
                 }
             }
         );

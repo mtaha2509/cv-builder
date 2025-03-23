@@ -22,9 +22,9 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_person" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:text="Tap to add profile picture"

@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import java.io.File;
@@ -30,7 +31,7 @@ public class FinalActivity extends AppCompatActivity {
         }
 
         // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("CV_DATA", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("CVBuilderPrefs", MODE_PRIVATE);
 
         // Initialize views
         profileImageView = findViewById(R.id.profileImageView);
@@ -48,15 +49,28 @@ public class FinalActivity extends AppCompatActivity {
         // Load profile image if exists
         String profileImageUriString = sharedPreferences.getString("profile_image_uri", "");
         if (!profileImageUriString.isEmpty()) {
-            Uri profileImageUri = Uri.parse(profileImageUriString);
-            profileImageView.setImageURI(profileImageUri);
+            try {
+                Uri profileImageUri = Uri.parse(profileImageUriString);
+                profileImageView.setImageURI(profileImageUri);
+            } catch (Exception e) {
+                Toast.makeText(this, "Error loading profile image", Toast.LENGTH_SHORT).show();
+            }
         }
 
         // Load and display personal details
-        nameTextView.setText(sharedPreferences.getString("name", ""));
-        emailTextView.setText(sharedPreferences.getString("email", ""));
-        phoneTextView.setText(sharedPreferences.getString("phone", ""));
-        addressTextView.setText(sharedPreferences.getString("address", ""));
+        String name = sharedPreferences.getString("name", "");
+        String email = sharedPreferences.getString("email", "");
+        String phone = sharedPreferences.getString("phone", "");
+        String address = sharedPreferences.getString("address", "");
+
+        if (name.isEmpty() && email.isEmpty() && phone.isEmpty() && address.isEmpty()) {
+            Toast.makeText(this, "Please fill in your personal details first", Toast.LENGTH_LONG).show();
+        }
+
+        nameTextView.setText(name);
+        emailTextView.setText(email);
+        phoneTextView.setText(phone);
+        addressTextView.setText(address);
 
         // Load and display summary
         summaryTextView.setText(sharedPreferences.getString("summary", ""));
@@ -168,7 +182,7 @@ public class FinalActivity extends AppCompatActivity {
             startActivity(Intent.createChooser(shareIntent, "Share CV via"));
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Toast.makeText(this, "Error sharing CV: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
